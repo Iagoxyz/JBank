@@ -27,7 +27,49 @@ public class Transfer {
     @Column(name = "transfer_Value")
     private BigDecimal transferValue;
 
-    @CreationTimestamp
     @Column(name = "transfer_date_time")
     private LocalDateTime transferDateTime;
+
+    public Transfer() {
+    }
+
+    public UUID getTransferId() {
+        return transferId;
+    }
+
+    public void setTransferId(UUID transferId) {
+        this.transferId = transferId;
+    }
+
+    public Wallet getReceiver() {
+        return receiver;
+    }
+
+    public void setReceiver(Wallet receiver) {
+        this.receiver = receiver;
+    }
+
+    public Wallet getSender() {
+        return sender;
+    }
+
+    public void setSender(Wallet sender) {
+        this.sender = sender;
+    }
+
+    public BigDecimal getTransferValue() {
+        return transferValue;
+    }
+
+    public void setTransferValue(BigDecimal transferValue) {
+        this.transferValue = transferValue;
+    }
+
+    public LocalDateTime getTransferDateTime() {
+        return transferDateTime;
+    }
+
+    public void setTransferDateTime(LocalDateTime transferDateTime) {
+        this.transferDateTime = transferDateTime;
+    }
 }

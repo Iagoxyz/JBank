@@ -1,10 +1,10 @@
 meta {
-  name: Create Wallet
+  name: Delete Wallet
   type: http
-  seq: 1
+  seq: 3
 }
 
-post {
+delete {
   url: http://localhost:8080/wallets
   body: json
   auth: inherit
@@ -12,7 +12,7 @@ post {
 
 body:json {
   {
-    "cpf": "5345345345",
+    "cpf": "418.009.100-37",
     "email": "test@gmail.com",
     "name": "Bruno"
   }

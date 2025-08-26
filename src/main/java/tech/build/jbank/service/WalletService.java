@@ -1,22 +1,31 @@
 package tech.build.jbank.service;
 
+import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 import tech.build.jbank.controller.dto.CreateWalletDto;
+import tech.build.jbank.controller.dto.DepositMoneyDto;
+import tech.build.jbank.entities.Deposit;
 import tech.build.jbank.entities.Wallet;
 import tech.build.jbank.exception.DeleteWalletException;
 import tech.build.jbank.exception.WalletDataAlreadyExistsException;
+import tech.build.jbank.exception.dto.WalletNotFoundException;
+import tech.build.jbank.repository.DepositReposity;
 import tech.build.jbank.repository.WalletRepository;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
 public class WalletService {
 
     private final WalletRepository walletRepository;
+    private final DepositReposity depositReposity;
 
-    public WalletService(WalletRepository walletRepository) {
+    public WalletService(WalletRepository walletRepository, DepositReposity depositReposity) {
         this.walletRepository = walletRepository;
+        this.depositReposity = depositReposity;
     }
 
     public Wallet createWallet(CreateWalletDto dto) {
@@ -49,5 +58,25 @@ public class WalletService {
         }
 
         return wallet.isPresent();
+    }
+
+    @Transactional
+    public void depositMoney(UUID walletId,
+                             DepositMoneyDto dto,
+                             String ipAddress) {
+
+        var wallet = walletRepository.findById(walletId)
+                .orElseThrow(() -> new WalletNotFoundException("there is no wallet with this id"));
+
+        var deposit = new Deposit();
+        deposit.setWallet(wallet);
+        deposit.setDepositValue(dto.value());
+        deposit.setDepositDateTime(LocalDateTime.now());
+        deposit.setIpAddress(ipAddress);
+
+        depositReposity.save(deposit);
+
+        wallet.setBalance(wallet.getBalance().add(dto.value()));
+        walletRepository.save(wallet);
     }
 }

@@ -1,10 +1,12 @@
 package tech.build.jbank.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tech.build.jbank.controller.dto.CreateWalletDto;
+import tech.build.jbank.controller.dto.DepositMoneyDto;
 import tech.build.jbank.exception.WalletDataAlreadyExistsException;
 import tech.build.jbank.service.WalletService;
 
@@ -36,6 +38,15 @@ public class WalletController {
         return deleted ?
                 ResponseEntity.noContent().build() :
                 ResponseEntity.notFound().build();
+    }
+
+    @PostMapping("/{walletId}/deposits")
+    public ResponseEntity<Void> depositMoney(@PathVariable("walletId") UUID walletId,
+                                             @RequestBody @Valid DepositMoneyDto dto,
+                                             HttpServletRequest servletRequest) {
+
+       walletService.depositMoney(walletId, dto, servletRequest.getAttribute("x-user-ip").toString());
+       return ResponseEntity.ok().build();
     }
 
 }

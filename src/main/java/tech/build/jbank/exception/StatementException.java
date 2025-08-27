@@ -3,21 +3,20 @@ package tech.build.jbank.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 
-public class WalletNotFoundException extends JbankException {
+public class StatementException extends JbankException {
 
     private final String detail;
 
-    public WalletNotFoundException(String detail) {
+    public StatementException(String detail) {
         super(detail);
         this.detail = detail;
     }
 
     @Override
     public ProblemDetail toProblemDetail() {
-        var pd = ProblemDetail.forStatus(HttpStatus.NOT_FOUND);
+        var pd = ProblemDetail.forStatus(HttpStatus.INTERNAL_SERVER_ERROR);
 
-        pd.setTitle("Wallet not found");
-        pd.setDetail(detail);
+        pd.setDetail("Invalid statement scenario");
 
         return pd;
     }

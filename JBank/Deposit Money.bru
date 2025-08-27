@@ -1,0 +1,21 @@
+meta {
+  name: Deposit Money
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://localhost:8080/wallets/986fea4b-3626-4cd4-b660-ab007f3bb2d5/deposits
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "value": 100
+  }
+}
+
+settings {
+  encodeUrl: true
+}

@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tech.build.jbank.controller.dto.CreateWalletDto;
 import tech.build.jbank.controller.dto.DepositMoneyDto;
+import tech.build.jbank.controller.dto.StatementDto;
 import tech.build.jbank.exception.WalletDataAlreadyExistsException;
 import tech.build.jbank.service.WalletService;
 
@@ -47,6 +48,16 @@ public class WalletController {
 
        walletService.depositMoney(walletId, dto, servletRequest.getAttribute("x-user-ip").toString());
        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{walletId}/statements")
+    public ResponseEntity<StatementDto> getStatements(@PathVariable UUID walletId,
+                                                      @RequestParam(name = "page", defaultValue = "0") Integer page,
+                                                      @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+
+        var statement = walletService.getStatements(walletId, page, pageSize);
+
+        return ResponseEntity.ok(statement);
     }
 
 }
